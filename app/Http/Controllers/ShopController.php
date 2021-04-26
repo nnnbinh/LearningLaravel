@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Shop;
 use App\Models\Product;
-
+use Exception;
 use Illuminate\Support\Arr;
 
 class ShopController extends Controller
@@ -38,7 +38,7 @@ class ShopController extends Controller
         $shop = Shop::find($id);
         $products = Product::all();
         $plucked = $shop->products->pluck('id');
-        return view('shop.edit',compact('shop','products','$plucked'));
+        return view('shop.edit',compact('shop','products','plucked'));
     }
 
     public function update(Request $request,$id){
@@ -51,5 +51,15 @@ class ShopController extends Controller
         $shop->save();
 
         return redirect()->route('shops.show',$id);
+    }
+
+    public function destroy(Request $request,$id){
+        try {
+            Shop::destroy($id);
+        } catch (Exception $e) {
+            $request->session()->flash('warning','Không thể xóa shop, hãy bỏ hết products trong shop trước');
+        }
+        
+        return redirect()->route('shops.index');
     }
 }

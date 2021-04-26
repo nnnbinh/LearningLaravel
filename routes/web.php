@@ -29,3 +29,7 @@ Route::resources(['shops' => ShopController::class]);
 Route::resources(['products' => ProductController::class]);
 
 Route::get('/test',['App\Http\Controllers\TestController','index']);
+
+Route::get('/session', function() {
+    session(['name' => 'Lê Chí Huy']);
+});
